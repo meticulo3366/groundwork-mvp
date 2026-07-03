@@ -1,0 +1,6 @@
+# local configuration (model/endpoint overrides — never commit credentials)
+.env
+
+# just in case npm ever gets reintroduced
+node_modules/
+package-lock.json
