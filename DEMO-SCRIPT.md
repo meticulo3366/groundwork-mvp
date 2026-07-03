@@ -31,6 +31,7 @@ title (it is deliberately not in the audience-visible navigation).
 | "Can I approve a refund exception beyond 30 days?" | Tier-1: permission-aware denial, nothing leaked. Supervisor: full answer from `KB-104` |
 | "How is proration calculated for a mid-cycle upgrade?" | Abstains while `KB-110` is unverified; verify it as Admin and the same question answers — governance is the fix |
 | "my account is broken" | One weak retrieval signal caps confidence below the threshold → abstains instead of guessing |
+| *anything generic* — "what's the capital of France?", "write me a poem" | Refused **without calling the model**: scope gate, ambiguity rule, and confidence gate all run first. Invite the panel to type whatever they want — the refusal is the demo |
 
 **Seeded tickets** (Agentic Ticket Queue):
 
@@ -190,5 +191,6 @@ When it lands, walk the seven rows:
 | "Why a local model?" | For the pilot: no data egress, zero marginal cost, no vendor dependency in the trust story. In production this same architecture points at any model — the governance doesn't move. |
 | "What happens at scale?" | The single-GPU latency you saw is per-interaction. Scale is a serving problem (more GPUs or a hosted model), not an architecture change — the governance layer is stateless per request. |
 | "Can the agent send email / touch billing?" | No, structurally. Tools are a registry; those tools aren't registered. Adding one is a deliberate governance act with an approval gate, not a prompt edit. |
+| "Why won't it answer general questions?" | By design — it's not a chatbot. The model is never allowed to answer from its own training knowledge, because that knowledge has no owner, no verification state, no citation, and no audit trail. An agent that freelances on trivia is the same agent that freelances on your refund policy. Every refusal writes an audit record with the gate that fired. |
 | "How is this different from RAG?" | RAG is in here, but it's the smallest part. The differentiators are the governance data model (verification/expiry/permissions enforced at retrieval), the policy gates before the model, output validation after it, human approval on writes, and the audit spine under all of it. |
 | "What did the model actually get sent?" | Only the verified, permitted sources plus a five-rule system prompt — both are in PROMPTS.md, one page, readable in a minute. |
