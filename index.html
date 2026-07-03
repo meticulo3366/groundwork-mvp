@@ -108,7 +108,6 @@
   <button data-tab="gov" onclick="showTab('gov')">3 · Governance Console</button>
   <button data-tab="eval" onclick="showTab('eval')">4 · Eval &amp; Scorecard</button>
   <button data-tab="audit" onclick="showTab('audit')">5 · Audit Trail <span id="auditCount" class="chip neutral">0</span></button>
-  <button data-tab="guide" onclick="showTab('guide')">Demo Guide</button>
 </nav>
 
 <main>
@@ -177,7 +176,7 @@
   <section class="tab" id="tab-guide">
     <div class="card">
       <h2>Live Demo Script — 8 beats, ~25 minutes</h2>
-      <div class="hint">Each beat has a one-click setup. Run them in order for the full narrative arc: governance → grounding → permissions → agency → safety → evidence.</div>
+      <div class="hint">Presenter view — not in the navigation. Reach it via <b>#guide</b> in the URL or by double-clicking the header title. Each beat has a one-click setup; run them in order for the full narrative arc: governance → grounding → permissions → agency → safety → evidence.</div>
       <div id="beats"></div>
     </div>
   </section>
@@ -889,6 +888,12 @@ document.getElementById('sampleQs').innerHTML = SAMPLE_QS.map(q =>
   `<button class="btn secondary small" onclick="askQuestion('${q.replace(/'/g,"\\'")}')">${q}</button>`).join('');
 document.getElementById('goldCount').textContent = GOLD_CASES.length;
 renderGov(); renderTickets(); renderBeats(); checkLive();
+
+/* Presenter guide is hidden from the nav: open via #guide or double-click the title */
+function maybeShowGuide() { if (location.hash === '#guide') showTab('guide'); }
+window.addEventListener('hashchange', maybeShowGuide);
+document.querySelector('header h1').addEventListener('dblclick', () => showTab('guide'));
+maybeShowGuide();
 </script>
 </body>
 </html>

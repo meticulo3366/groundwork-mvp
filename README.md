@@ -26,7 +26,7 @@ Companion documents:
 - [Architecture](#architecture)
 - [Flow 1 — Agent Assist](#flow-1--agent-assist-option-a-read-only)
 - [Flow 2 — Agentic Ticket Queue](#flow-2--agentic-ticket-queue-option-b-gated-writes)
-- [The six tabs](#the-six-tabs)
+- [The five tabs](#the-five-tabs-plus-a-hidden-presenter-guide)
 - [The governance data model](#the-governance-data-model)
   - [Entity model](#entity-model)
 - [Retrieval architecture — what the RAG actually is](#retrieval-architecture--what-the-rag-actually-is)
@@ -199,7 +199,7 @@ sales question → routed out of scope.
 
 ---
 
-## The six tabs
+## The five tabs (plus a hidden presenter guide)
 
 | Tab | What it does |
 |---|---|
@@ -208,7 +208,7 @@ sales question → routed out of scope.
 | **3 · Governance Console** | The governance data model: 12 articles with owner, verification state, expiry, access group. Admin persona can verify unverified content — which changes agent behavior live. |
 | **4 · Eval & Scorecard** | Runs the 24-case gold set (answerable, ambiguous, restricted, out-of-scope, adversarial) through the live engine and computes the seven-field scorecard from the run. Nothing hand-entered. |
 | **5 · Audit Trail** | One record per interaction: actor, retrieved sources *with governance state at retrieval time*, exclusions with reasons, confidence, generation mode, outcome, security flags, human decision. JSON export. |
-| **Demo Guide** | The 8-beat live demo script with one-click setup per beat. |
+| **Demo Guide** *(hidden)* | Presenter-only — not in the navigation. Open with `#guide` in the URL or double-click the header title. The 8-beat live demo script with one-click setup per beat. |
 
 ## The governance data model
 

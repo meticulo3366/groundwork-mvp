@@ -2,7 +2,8 @@
 
 ~12 minutes talking + demo, 3 minutes for the scorecard close. Audience: CTO / enterprise
 architect primary, AE and product observer secondary. Every beat below has a one-click setup in
-the app's **Demo Guide** tab if you lose your place.
+the app's hidden presenter guide — open `http://localhost:4173/#guide` or double-click the header
+title (it is deliberately not in the audience-visible navigation).
 
 ---
 
@@ -13,6 +14,7 @@ the app's **Demo Guide** tab if you lose your place.
 - [ ] Ask one throwaway question to confirm ~1–2 s answers
 - [ ] Persona switcher set to **Riley Chen — Tier-1 Agent**
 - [ ] Tabs in a known state: no tickets processed yet, eval not yet run
+- [ ] Presenter guide reachable: open `#guide` (or double-click the title) in a second window
 - [ ] Know your safety net: if Ollama dies mid-demo, the app silently switches to the
       deterministic template engine and *nothing visibly breaks* — the badge changes, that's all.
       If asked, own it: "and that's the degradation story — governance never depended on the model."
