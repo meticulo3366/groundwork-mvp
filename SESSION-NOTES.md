@@ -6,7 +6,7 @@ A running log of what was built, why, and where it lives. For the product itself
 ## What Groundwork is
 
 A fully local, governed agentic AI demo for a Billing & Account support queue, built as the
-centerpiece of a Field CTO interview package. The thesis: production AI agents don't fail because
+centerpiece of a Field CTO technical talk. The thesis: production AI agents don't fail because
 the model isn't smart enough — they fail because enterprise context, permissions, workflow logic,
 evaluation, and observability aren't engineered for production. Groundwork is the proof: a
 deterministic governance layer (permission-aware retrieval, injection scanning, policy gates, a
@@ -58,7 +58,7 @@ stays pure product documentation.
 the capital of France?") are refused by deterministic gates (scope, ambiguity, confidence) *before*
 the model is ever called — proven live via `engineAsk` returning `modelCalled: false` on four
 generic probes. Added as an explicit demo beat and Q&A answer: the refusal is the feature, not a
-bug, and the panel is invited to try to break it live.
+bug, and the audience is invited to try to break it live.
 
 **Companion deck.** A 13-slide Field CTO talk deck was drafted and then updated in place (via the
 Claude Design MCP / browser) to reference Groundwork by name, with its real measured eval numbers

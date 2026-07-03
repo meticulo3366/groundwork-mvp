@@ -31,7 +31,7 @@ title (it is deliberately not in the audience-visible navigation).
 | "Can I approve a refund exception beyond 30 days?" | Tier-1: permission-aware denial, nothing leaked. Supervisor: full answer from `KB-104` |
 | "How is proration calculated for a mid-cycle upgrade?" | Abstains while `KB-110` is unverified; verify it as Admin and the same question answers — governance is the fix |
 | "my account is broken" | One weak retrieval signal caps confidence below the threshold → abstains instead of guessing |
-| *anything generic* — "what's the capital of France?", "write me a poem" | Refused **without calling the model**: scope gate, ambiguity rule, and confidence gate all run first. Invite the panel to type whatever they want — the refusal is the demo |
+| *anything generic* — "what's the capital of France?", "write me a poem" | Refused **without calling the model**: scope gate, ambiguity rule, and confidence gate all run first. Invite the audience to type whatever they want — the refusal is the demo |
 
 **Seeded tickets** (Agentic Ticket Queue):
 
