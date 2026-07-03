@@ -20,6 +20,27 @@ Companion documents:
 
 ---
 
+## Contents
+
+- [Quick start](#quick-start)
+- [Architecture](#architecture)
+- [Flow 1 — Agent Assist](#flow-1--agent-assist-option-a-read-only)
+- [Flow 2 — Agentic Ticket Queue](#flow-2--agentic-ticket-queue-option-b-gated-writes)
+- [The six tabs](#the-six-tabs)
+- [The governance data model](#the-governance-data-model)
+  - [Entity model](#entity-model)
+- [Retrieval architecture — what the RAG actually is](#retrieval-architecture--what-the-rag-actually-is)
+  - [R — retrieval](#r--retrieval-deterministic-lexical-scoring-not-a-vector-database)
+  - [Confidence gate](#confidence-gate-routing-math)
+  - [A — augmentation](#a--augmentation-what-the-model-is-actually-sent)
+  - [G — generation](#g--generation-local)
+  - [V — validation](#v--validation-the-step-most-rag-diagrams-skip)
+- [Live generation](#live-generation)
+- [Evaluation](#evaluation)
+- [Security mapping](#security-mapping-practical-not-theater)
+- [File map](#file-map)
+- [Troubleshooting](#troubleshooting)
+
 ## Quick start
 
 Requirements: Node 18+ and [Ollama](https://ollama.com) running locally.
