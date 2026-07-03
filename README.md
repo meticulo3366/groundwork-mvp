@@ -17,6 +17,7 @@ Companion documents:
 | [`PROMPTS.md`](PROMPTS.md) | Model selection research + rationale, inference settings, and the **canonical system prompts** (parsed by the server at startup — edit prompts there, not in code) |
 | [`governed-agentic-pilot-plan.md`](governed-agentic-pilot-plan.md) | The full 5-day pilot plan this demo implements: objectives, timeline, scorecard, risks, exec readout template |
 | [`DEMO-SCRIPT.md`](DEMO-SCRIPT.md) | Timed speaker script for the live demo: 8 beats, pre-flight checklist, Q&A ammunition |
+| [`SESSION-NOTES.md`](SESSION-NOTES.md) | Build history — what was built, why, and where everything lives |
 
 ---
 
@@ -409,6 +410,8 @@ groundwork/
 ├── PROMPTS.md      model research/rationale + canonical system prompts (parsed at startup)
 ├── DEMO-SCRIPT.md  timed speaker script with pre-flight checklist and Q&A prep
 ├── governed-agentic-pilot-plan.md  the full 5-day pilot plan this demo implements
+├── SESSION-NOTES.md  build history and where everything lives
+├── docs/index.html  bundled single-file export of the companion slide deck
 ├── README.md       this file
 └── .env            optional: OLLAMA_MODEL / OLLAMA_URL overrides
 ```
