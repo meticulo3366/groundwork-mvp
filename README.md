@@ -89,7 +89,7 @@ flowchart TB
     end
 
     subgraph browser ["Browser — index.html, zero-build single file"]
-        UI["User interface — six tabs<br/>assist · tickets · governance · eval · audit · guide"]
+        UI["User interface — five tabs<br/>assist · tickets · governance · eval · audit"]
         ENG["Deterministic engine<br/>gates · retrieval · routing · escalation"]
         ADM2["Governance data model — 12 KB articles<br/>owner · verification status · expiry · access group"]
         GUARD["Citation guard (OWASP LLM02)<br/>accepts output only if citations ⊆ permitted sources"]
