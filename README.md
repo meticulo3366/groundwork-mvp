@@ -205,6 +205,145 @@ Deliberately seeded for the demo: `KB-108` (expired, contradicts current policy)
 (unverified proration rules — the "governance is the fix" beat), `KB-104` (supervisor-only refund
 exceptions).
 
+### Entity model
+
+Six entity types drive the whole system. The audit record is deliberately the center of gravity —
+every other entity leaves its fingerprint there:
+
+```mermaid
+erDiagram
+    ARTICLE {
+        string id PK "KB-101 .. KB-112"
+        string title
+        string answer "the governed content body"
+        string_array tags "retrieval keywords"
+        string owner "accountable team"
+        string status "verified / unverified / expired"
+        date updated "last verification date"
+        date expires "past expiry = excluded"
+        string access_group "general / restricted"
+    }
+    PERSONA {
+        string key PK "tier1 / supervisor / admin"
+        string name
+        string_array groups "access groups held"
+        bool admin "can verify content"
+    }
+    TICKET {
+        string id PK "T-1001 .. T-1006"
+        string customer
+        string subject
+        string body "untrusted input, treated as data"
+    }
+    TOOL_REGISTRY {
+        string name PK "draft_response / propose_field_update / escalate"
+    }
+    AUDIT_RECORD {
+        string id PK "A-0001 .."
+        datetime ts
+        string kind "assist_query / ticket_pipeline / governance_action"
+        string actor "persona or agent service identity"
+        string input
+        json retrieved "sources with governance state at retrieval time"
+        json excluded "source id + exclusion reason"
+        float confidence
+        string outcome "answer / denied / abstain / routing result"
+        string generation "live (model) or template, with guard notes"
+        bool security "true when an injection or blocked tool fired"
+        string blockedTool "e.g. issue_refund"
+        int latencyMs
+        float costUSD
+        string humanDecision "approved / edited / rejected_escalated"
+    }
+    GOLD_CASE {
+        string q "question or ticket reference"
+        string type "answerable / ambiguous / restricted / oos / adversarial"
+        string expectKb "expected citation for answerable cases"
+    }
+    PERSONA ||--o{ AUDIT_RECORD : "acts as"
+    ARTICLE }o--o{ AUDIT_RECORD : "retrieved or excluded in"
+    TICKET ||--o{ AUDIT_RECORD : "produces"
+    TOOL_REGISTRY ||--o{ AUDIT_RECORD : "gates actions in"
+    GOLD_CASE }o--o| ARTICLE : "expects citation of"
+    GOLD_CASE }o--o| TICKET : "replays"
+```
+
+Notes on the two structural choices:
+
+- **Access control lives on the article, not in a prompt.** `access_group` is matched against the
+  requesting persona's `groups` at retrieval time; the ticket pipeline runs under a fixed *service
+  identity* holding only `general`. There is no "please don't reveal restricted content"
+  instruction anywhere — restricted content is simply never in the model's input.
+- **The tool registry is an allowlist, not a blocklist.** `issue_refund` and `send_to_customer`
+  aren't "denied"; they have no row. An injection can't invoke what doesn't exist.
+
+## Retrieval architecture — what the RAG actually is
+
+"RAG" here is precise and deliberately boring. Each stage is small enough to audit by hand:
+
+### R — retrieval (deterministic lexical scoring, not a vector database)
+
+1. **Tokenize** the query: lowercase, split on non-alphanumerics, drop tokens ≤ 2 chars and
+   stopwords, **deduplicate** (so repeated words can't inflate relevance).
+2. **Score** every article per query token: `+2.5` for a tag match, `+2.0` for a title substring,
+   `+1.0` for a body substring. Articles below a floor of `3.0` are dropped as irrelevant.
+3. **Partition by governance before anything else sees the ranking:** for each relevant article,
+   in order — requester lacks the article's `access_group` → excluded (`permission`); past
+   `expires` or `status: expired` → excluded (`expired`); `status: unverified` → excluded
+   (`unverified`). Exclusions are kept *with their reasons* and surfaced in the UI and audit
+   record — the system shows what it refused to use, not just what it used.
+
+Why lexical instead of embeddings, on purpose: the corpus is 12 governed articles, and at pilot
+scale explainability beats recall — a reviewer can recompute any relevance score by hand, which
+makes "why did the agent use this source" a closed question. Swapping in an embedding model and
+vector index later replaces step 2 only; the governance partition, confidence gate, prompt
+assembly, and citation guard are all downstream of it and unchanged. That's the point of the
+architecture: retrieval quality is a swappable component, governance is not.
+
+### Confidence gate (routing math)
+
+```
+confidence = min(0.97, 0.30 + 0.075 × top_eligible_score)
+if distinct_matched_tokens(top) < 2:  confidence = min(confidence, 0.50)   # one-word evidence is weak
+answer only if confidence ≥ 0.60, else abstain / escalate
+```
+
+One extra rule: if the best **governance-excluded** source outscores the best eligible source by
+more than 2 points, the engine abstains even above threshold — the authoritative answer exists but
+isn't currently trustworthy, and answering from a weaker source would mislead. (This is the
+mechanic behind the proration demo beat: unverified `KB-110` outscores everything, so the agent
+abstains until an admin verifies it.)
+
+### A — augmentation (what the model is actually sent)
+
+The model's entire input is three things, roughly 400–600 tokens:
+
+```
+system prompt          from PROMPTS.md — grounding rules, [KB-xxx] citation contract,
+                       INSUFFICIENT_GROUNDING escape hatch, data-not-instructions clause
+<source id="KB-103" title="...">   top eligible source(s): up to 2 for answers,
+  ...governed content...            exactly 1 for ticket drafts
+</source>
+the question / ticket  explicitly framed as data, never as instructions
+```
+
+No conversation history, no persona details, no other knowledge. The model cannot leak what it
+was never given — permissioning is enforced by input construction, not by asking nicely.
+
+### G — generation (local)
+
+Ollama chat completion — `granite4.1:8b` by default, `temperature 0.1`, thinking disabled,
+400-token output cap, model held resident with `keep_alive`. Full settings and per-model
+rationale: [`PROMPTS.md`](PROMPTS.md).
+
+### V — validation (the step most RAG diagrams skip)
+
+The response is parsed for `[KB-xxx]` citations and accepted only if the citation set is
+**non-empty and a subset of the sources provided**. Anything else — a fabricated citation, no
+citation, or an `INSUFFICIENT_GROUNDING` reply — rejects the output: the deterministic template
+serves instead and the rejection is written to the audit record's `generation` field. The model
+is inside a contract it can fail, and failing it is observable.
+
 ## Live generation
 
 - **Model**: auto-selected at startup from the preference chain
