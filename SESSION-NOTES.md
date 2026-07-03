@@ -60,10 +60,12 @@ the model is ever called — proven live via `engineAsk` returning `modelCalled:
 generic probes. Added as an explicit demo beat and Q&A answer: the refusal is the feature, not a
 bug, and the audience is invited to try to break it live.
 
-**Companion deck.** A 13-slide Field CTO talk deck was drafted and then updated in place (via the
-Claude Design MCP / browser) to reference Groundwork by name, with its real measured eval numbers
-replacing the original placeholder anecdotes, and the closing slide/notes pointing at the 12-minute
-live demo. A bundled single-file export lives in `docs/index.html` (suitable for GitHub Pages).
+**Companion deck.** A Field CTO talk deck was drafted and then updated in place (via the Claude
+Design MCP / browser) to reference Groundwork by name, with its real measured eval numbers
+replacing the original placeholder anecdotes, and the closing slide/notes pointing at the
+12-minute live demo. Later restructured to 8 main slides with 3 appendix slides (pilot comparison,
+field lessons, mermaid source) moved out of the main flow. A bundled single-file export of the
+8 main slides lives in `docs/index.html`, published via GitHub Pages.
 
 ## Where everything lives
 
